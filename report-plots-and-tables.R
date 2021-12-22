@@ -53,7 +53,7 @@ fig1_data <-
   )
 fig1_data <- sf::st_transform(fig1_data, crs = crs)
 
-fig1_data <- fig1_data %>% dplyr::filter(Year %in% seq(1965, 2020, by = 5))
+fig1_data <- fig1_data %>% dplyr::filter(Year %in% seq(1965, 2021, by = 5))
 
 ggplot() +
   #geom_sf(data = europe_shape, fill = "grey80", color = "grey90") +

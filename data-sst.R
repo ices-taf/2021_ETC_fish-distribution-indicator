@@ -43,7 +43,7 @@ areas <-
 #plot(areas)
 
 # read sst nc as raster
-b <- brick("bootstrap/data/hadley-sst/HadSST.4.0.0.0_median.nc")
+b <- brick("bootstrap/data/hadley-sst/HadSST.4.0.1.0_median.nc")
 
 areas <- st_transform(areas, crs(b))
 

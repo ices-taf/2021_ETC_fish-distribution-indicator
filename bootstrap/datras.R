@@ -9,6 +9,8 @@ library(icesDatras)
 library(icesTAF)
 library(dplyr)
 
+year.max <- 2020 # current year - 1
+
 # read design table and look download all required surveys
 ctab <- read.taf(taf.data.path("control_file", "control_file.csv"))
 
@@ -34,7 +36,7 @@ for (i in seq_len(nrow(toget))) {
   # which survey etc.
   survey <- toget[i, "Survey.name"]
   start.year <- toget[i, "Start.year"]
-  end.year <- pmin(2019, max(icesDatras::getSurveyYearList(survey)))
+  end.year <- pmin(year.max, max(icesDatras::getSurveyYearList(survey)))
   quarter <- toget[i, "Quarter"]
   gear <- toget[i, "Gear"]
 
@@ -54,7 +56,7 @@ for (i in seq_len(nrow(toget))) {
       hh <-
         hh %>%
           select(Survey, Quarter, Country, Ship, Gear, SweepLngt,
-                 GearExp, DoorType, StNo, HaulNo, Year,
+                 GearEx, DoorType, StNo, HaulNo, Year,
                  StatRec) %>%
           filter(Gear == gear)
       hh_list[[length(hh_list) + 1]] <- hh
@@ -67,7 +69,7 @@ for (i in seq_len(nrow(toget))) {
       hl <-
         hl %>%
           select(Survey, Quarter, Country, Ship, Gear, SweepLngt,
-                 GearExp, DoorType, StNo, HaulNo, Year,
+                 GearEx, DoorType, StNo, HaulNo, Year,
                  HLNoAtLngt, Valid_Aphia) %>%
           filter(HLNoAtLngt > 0 & !is.na(Valid_Aphia) & Gear == gear) %>%
           select(-HLNoAtLngt) %>%
@@ -85,7 +87,7 @@ datras_data <-
     left_join(
       do.call(rbind, hh_list),
       by = c("Survey", "Quarter", "Country", "Ship", "Gear", "SweepLngt",
-             "GearExp", "DoorType", "StNo", "HaulNo", "Year")
+             "GearEx", "DoorType", "StNo", "HaulNo", "Year")
     ) %>%
     select(
       Survey, Quarter, Year, StatRec, Valid_Aphia
@@ -105,7 +107,7 @@ if (FALSE) {
     hh_list[[1]][1, ] %>% mutate(Country = "ES"),
     by = c(
       "Survey", "Quarter", "Country", "Ship", "Gear", "SweepLngt",
-      "GearExp", "DoorType", "StNo", "HaulNo", "Year"
+      "GearEx", "DoorType", "StNo", "HaulNo", "Year"
     )
   ) %>%
       select(
@@ -121,7 +123,7 @@ if (FALSE) {
         hh_list[[1]][1,] %>% mutate(Country = "ES"),
         by = c(
           "Survey", "Quarter", "Country", "Ship", "Gear", "SweepLngt",
-          "GearExp", "DoorType", "StNo", "HaulNo", "Year"
+          "GearEx", "DoorType", "StNo", "HaulNo", "Year"
         )
       ) %>%
       select(

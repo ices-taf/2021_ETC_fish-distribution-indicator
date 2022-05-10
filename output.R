@@ -13,8 +13,9 @@ library(tidyr)
 mkdir("output")
 
 # read in model results
-stsq_results <- read.taf("model/stsq_results.csv")
-annual_results <- read.taf("model/annual_results.csv")
+annual_results_statsq <- read.taf("model/annual_results_statsq.csv")
+annual_results_ices <- read.taf("model/annual_results_ices.csv")
+annual_results_msfd <- read.taf("model/annual_results_msfd.csv")
 
 # Fig 1 requires
 
@@ -31,12 +32,9 @@ annual_results <- read.taf("model/annual_results.csv")
 # * Lon - longitude
 
 fig1_data <-
-  stsq_results %>%
-  mutate(
-    F_CODE = paste0(27, ".", F_CODE),
-  ) %>%
+  annual_results_statsq %>%
   select(
-    StatRec, Survey, F_CODE, Quarter, Year,
+    StatRec, Survey, Quarter, Year,
     Lusitanian, Boreal, ratio, Lat, Lon, WKT
   )
 
@@ -65,8 +63,8 @@ file.remove(files)
 # * Unknown Biological affinity
 # * Area
 
-fig2_data <-
-  annual_results %>%
+fig2_data_ices <-
+  annual_results_ices %>%
   mutate(
     F_CODE = paste0(27, ".", F_CODE),
   ) %>%
@@ -75,7 +73,17 @@ fig2_data <-
   ) %>%
   arrange(F_CODE, Year)
 
-write.taf(fig2_data, dir = "output", quote = TRUE)
+write.taf(fig2_data_ices, dir = "output", quote = TRUE)
+
+
+fig2_data_msfd <-
+  annual_results_msfd %>%
+  select(
+    Year, Atlantic, Boreal, Lusitanian, Unknown, msfd
+  ) %>%
+  arrange(msfd, Year)
+
+write.taf(fig2_data_msfd, dir = "output", quote = TRUE)
 
 
 # Figure 3 requires
@@ -87,8 +95,8 @@ write.taf(fig2_data, dir = "output", quote = TRUE)
 # * Temp2 - ?
 # * Area
 
-fig3_data <-
-  annual_results %>%
+fig3_data_ices <-
+  annual_results_ices %>%
   mutate(
     F_CODE = paste0(27, ".", F_CODE),
   ) %>%
@@ -97,4 +105,13 @@ fig3_data <-
   ) %>%
   arrange(F_CODE, Year)
 
-write.taf(fig3_data, dir = "output", quote = TRUE)
+write.taf(fig3_data_ices, dir = "output", quote = TRUE)
+
+fig3_data_msfd <-
+  annual_results_msfd %>%
+  select(
+    Year, ratio, sst, sst1, sst2, msfd
+  ) %>%
+  arrange(msfd, Year)
+
+write.taf(fig3_data_msfd, dir = "output", quote = TRUE)

@@ -11,14 +11,14 @@ library(Kendall)
 library(dplyr)
 
 # read annual data for ices divisions
-annual_results <-
+annual_results_ices <-
   read.taf(
-    "model/annual_results.csv"
+    "model/annual_results_ices.csv"
   )
 
 # run a Kendall test
-sst_regressions <-
-  annual_results %>%
+sst_regressions_ices <-
+  annual_results_ices %>%
     mutate(
       ratio = ifelse(ratio == Inf, 30, ratio)
     ) %>%
@@ -34,7 +34,7 @@ sst_regressions <-
     arrange(F_CODE) %>%
     select(-Survey, -Quarter)
 
-write.taf(sst_regressions, dir = "model", quote = TRUE)
+write.taf(sst_regressions_ices, dir = "model", quote = TRUE)
 
 
 # read annual data for msfd regions

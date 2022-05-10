@@ -52,7 +52,7 @@ if (FALSE) {
 }
 
 # Compute stat square summaries
-stsq_results <-
+annual_results_statsq <-
   lusitanian %>%
   group_by(
     Survey, Quarter, Year, StatRec, F_CODE, Lat, Lon, WKT, Biogeo.affinity
@@ -71,12 +71,12 @@ stsq_results <-
   )
 
 # check
-stsq_results %>% filter(StatRec == "41E8" & Year == 2011)
+annual_results_statsq %>% filter(StatRec == "41E8" & Year == 2011)
 
-write.taf(stsq_results, dir = "model", quote = TRUE)
+write.taf(annual_results_statsq, dir = "model", quote = TRUE)
 
 # compute annual summaries for ices divisions
-annual_results <-
+annual_results_ices <-
   lusitanian %>%
   select(
     Year, Survey, Quarter, F_CODE, Valid_Aphia, sst, sst1, sst2, Biogeo.affinity
@@ -99,9 +99,9 @@ annual_results <-
   )
 
 # checks
-annual_results %>% filter(grepl("4[.]", F_CODE) & Year == 2011)
+annual_results_ices %>% filter(grepl("4[.]", F_CODE) & Year == 2011)
 
-write.taf(annual_results, dir = "model", quote = TRUE)
+write.taf(annual_results_ices, dir = "model", quote = TRUE)
 
 
 # compute annual summaries for msfd regions

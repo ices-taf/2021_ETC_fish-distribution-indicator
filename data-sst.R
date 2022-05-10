@@ -52,7 +52,7 @@ b[b > 100] <- NA
 
 
 # filter for years of interest (1963 to allow for 2 year lag)
-b <- b[[which(years(b@z$time) %in% 1963:2019)]]
+b <- b[[which(years(b@z$time) %in% 1963:2021)]]
 yrs <- years(b@z$time)
 
 # group accross years
@@ -74,9 +74,22 @@ sst <-
     sst = c(means)
   )
 
-# calculate lags at 1 and 2 years
-sst$sst1 <- c(NA, sst$sst[-nrow(sst)])
-sst$sst2 <- c(NA, sst$sst1[-nrow(sst)])
+sst <-
+  do.call(
+    rbind,
+    by(
+      sst,
+      sst$F_CODE,
+      function(x) {
+        # calculate lags at 1 and 2 years
+        x$sst1 <- c(NA, x$sst[-nrow(x)])
+        x$sst2 <- c(NA, x$sst1[-nrow(x)])
+        x
+      }
+    )
+  )
+row.names(sst) <- NULL
+
 sst <- sst[sst$Year >= 1965,]
 
 write.taf(sst, dir = "data", quote = TRUE)

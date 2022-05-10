@@ -68,7 +68,7 @@ cap_2 <-
   biogeographical affinity group.'
 
 # Output figure
-include_graphics("report/Figure2_temporal_species_count.png")
+include_graphics("report/Figure2_temporal_species_count_msfd.png")
 ```
 
 **Note:**
@@ -87,14 +87,14 @@ cap_3 <-
   Lusitanian and Boreal species'
 
 # Output figure
-include_graphics("report/Figure2_temporal_species_count.png")
+include_graphics("report/Figure3_temporal_ratio_sst_msfd.png")
 ```
 
 **Note:**
 The figure shows the ratio of the number of Lucitanian to Boral species
 observed by year and ICES division.  Also shown is the sea surface
-temperature anomaly centered and scaled so that both series have the
-same mean and variance to aid interpretation.
+temperature anomaly (from the previous year) centered and scaled so that both series have the
+same mean and variance to aid visual interpretation.
 
 **Data sources:**
 Database of Trawl Surveys (DATRAS) provided by International Council for

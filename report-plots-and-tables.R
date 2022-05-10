@@ -14,10 +14,6 @@ mkdir("report")
 fig1_data <- read.taf("output/fig1_data.csv")
 fig1_data <- sf::st_as_sf(fig1_data, wkt = "WKT", crs = 4326)
 
-fig1_data %>%
-  filter(F_CODE == "27.6.b") %>%
-  as.data.frame()
-
 sampled_statrecs <- unique(fig1_data["StatRec"])
 
 if (FALSE) {
@@ -80,12 +76,12 @@ ggplot2::ggsave("Figure1_temporal_ratio_map.png", path = "report/", width = 170*
 #           biogeographical affinity group
 # -------------------------------------------------------------------
 
-# read in counts year and affinity
-fig2_data <- read.taf("output/fig2_data.csv")
+# read in counts year and affinity for ices divisions
+fig2_data_ices <- read.taf("output/fig2_data_ices.csv")
 
-fig2_data <-
+fig2_data_ices <-
   tidyr::pivot_longer(
-    fig2_data,
+    fig2_data_ices,
     cols = Atlantic:Unknown,
     names_to = "affinity",
     values_to = "count"
@@ -94,13 +90,42 @@ fig2_data <-
     count = ifelse(is.na(count), 0, count)
   )
 
-ggplot(fig2_data,
+ggplot(fig2_data_ices,
   aes(x = Year, y = count, col = factor(affinity))) +
   geom_line() +
   facet_wrap(~ F_CODE, scales = "free") +
   theme_minimal()
 
-ggplot2::ggsave("Figure2_temporal_species_count.png", path = "report/", width = 170*2, height = 100.5*2, units = "mm", dpi = 600)
+ggplot2::ggsave("Figure2_temporal_species_count_ices.png", path = "report/", width = 170 * 2, height = 100.5 * 2, units = "mm", dpi = 600)
+
+
+
+# read in counts year and affinity for msfd regions
+fig2_data_msfd <- read.taf("output/fig2_data_msfd.csv")
+
+fig2_data_msfd <-
+  tidyr::pivot_longer(
+    fig2_data_msfd,
+    cols = Atlantic:Unknown,
+    names_to = "affinity",
+    values_to = "count"
+  ) %>%
+  mutate(
+    count = ifelse(is.na(count), 0, count)
+  )
+
+ggplot(
+  fig2_data_msfd,
+  aes(x = Year, y = count, col = factor(affinity))
+) +
+  geom_line() +
+  facet_wrap(~msfd, scales = "free") +
+  theme_minimal()
+
+ggplot2::ggsave("Figure2_temporal_species_count_msfd.png", path = "report/", width = 170 * 2, height = 100.5 * 2, units = "mm", dpi = 600)
+
+
+
 
 
 # -------------------------------------------------------------------
@@ -108,18 +133,18 @@ ggplot2::ggsave("Figure2_temporal_species_count.png", path = "report/", width = 
 #           Lusitanian and Boreal species
 # -------------------------------------------------------------------
 
-fig3_data <- read.taf("output/fig3_data.csv")
+fig3_data_ices <- read.taf("output/fig3_data_ices.csv")
 
 # scale temperature to have same mean and slope as ratio??
-fig3_data <-
-  fig3_data %>%
+fig3_data_ices <-
+  fig3_data_ices %>%
     group_by(F_CODE) %>%
     mutate(
       sst1_scaled = (sst1 - mean(sst1, na.rm = TRUE)) / sd(sst1, na.rm = TRUE) * sd(ratio) + mean(ratio)
     ) %>%
     ungroup()
 
-ggplot(fig3_data) +
+ggplot(fig3_data_ices) +
   geom_line(aes(x = Year, y = ratio), col = rgb(0, 44, 86, maxColorValue = 255)) +
   geom_line(aes(x = Year, y = sst1_scaled), col = rgb(172, 0, 62, maxColorValue = 255)) +
   facet_wrap(~ F_CODE, scales = "free") +
@@ -129,7 +154,36 @@ ggplot(fig3_data) +
   ) +
   theme_minimal()
 
-ggplot2::ggsave("Figure3_temporal_ratio_sst.png", path = "report/", width = 170*2, height = 100.5*2, units = "mm", dpi = 600)
+ggplot2::ggsave("Figure3_temporal_ratio_sst_ices.png", path = "report/", width = 170 * 2, height = 100.5 * 2, units = "mm", dpi = 600)
+
+
+
+
+fig3_data_msfd <- read.taf("output/fig3_data_msfd.csv")
+
+# scale temperature to have same mean and slope as ratio??
+fig3_data_msfd <-
+  fig3_data_msfd %>%
+    group_by(msfd) %>%
+    mutate(
+      sst1_scaled = (sst1 - mean(sst1, na.rm = TRUE)) / sd(sst1, na.rm = TRUE) * sd(ratio) + mean(ratio)
+    ) %>%
+    ungroup()
+
+ggplot(fig3_data_msfd) +
+  geom_line(aes(x = Year, y = ratio), col = rgb(0, 44, 86, maxColorValue = 255)) +
+  geom_line(aes(x = Year, y = sst1_scaled), col = rgb(172, 0, 62, maxColorValue = 255)) +
+  facet_wrap(~ msfd, scales = "free") +
+  scale_y_continuous(
+    "L/B ratio"#,
+#    sec.axis = sec_axis(~ . * 1, name = "temperature anomaly (oC)")
+  ) +
+  theme_minimal()
+
+ggplot2::ggsave("Figure3_temporal_ratio_sst_msfd.png", path = "report/", width = 170 * 2, height = 100.5 * 2, units = "mm", dpi = 600)
+
+
+
 
 
 # -------------------------------------------------------------------

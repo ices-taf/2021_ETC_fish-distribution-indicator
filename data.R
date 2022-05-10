@@ -8,7 +8,8 @@ library(icesTAF)
 mkdir("data")
 
 # processing
-sourceTAF("data-sst.R")
+sourceTAF("data-sst-icesareas.R")
+sourceTAF("data-sst-eeamru.R")
 sourceTAF("data-statrecs.R")
 sourceTAF("data-species.R")
 

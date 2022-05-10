@@ -1,5 +1,9 @@
 # read in a and process statrecs shapefile
 
+library(icesTAF)
+library(dplyr)
+library(sf)
+
 # read in statsq table
 statrecs <- sf::read_sf("bootstrap/data/ICES-stat-rec/StatRec_map_Areas_Full_20170124.shp")
 

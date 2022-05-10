@@ -43,3 +43,6 @@ detachAllPackages <- function(keep = NULL) {
     detach(package, character.only = TRUE)
 }
 
+.bootDatasets <- list.files("bootstrap/data", full.names = TRUE, recursive = TRUE)
+names(.bootDatasets) <- basename(.bootDatasets)
+.bootDatasets <- as.list(.bootDatasets)

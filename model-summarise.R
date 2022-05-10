@@ -19,6 +19,13 @@ lusitanian <-
     colClasses = c("StatRec" = "character")
   )
 
+lusitanian_msfd <-
+  read.taf(
+    "data/lusitanian_msfd.csv",
+    colClasses = c("StatRec" = "character")
+  )
+
+
 if (FALSE) {
   # investigate unknown species
   lusitanian %>%
@@ -44,7 +51,7 @@ if (FALSE) {
 
 }
 
-# Compute stat square and annual summaries
+# Compute stat square summaries
 stsq_results <-
   lusitanian %>%
   group_by(
@@ -68,7 +75,7 @@ stsq_results %>% filter(StatRec == "41E8" & Year == 2011)
 
 write.taf(stsq_results, dir = "model", quote = TRUE)
 
-# compute annual summaries
+# compute annual summaries for ices divisions
 annual_results <-
   lusitanian %>%
   select(
@@ -95,3 +102,33 @@ annual_results <-
 annual_results %>% filter(grepl("4[.]", F_CODE) & Year == 2011)
 
 write.taf(annual_results, dir = "model", quote = TRUE)
+
+
+# compute annual summaries for msfd regions
+annual_results_msfd <-
+  lusitanian_msfd %>%
+  select(
+    Year, msfd, Valid_Aphia, sst, sst1, sst2, Biogeo.affinity
+  ) %>%
+  unique() %>%
+  group_by(
+    Year, msfd, sst, sst1, sst2, Biogeo.affinity
+  ) %>%
+  summarise(
+    count = n()
+  ) %>%
+  ungroup() %>%
+  pivot_wider(
+    names_from = Biogeo.affinity,
+    values_from = count,
+    values_fill = list(count = 0)
+  ) %>%
+  mutate(
+    ratio = ifelse(Boreal > 0, Lusitanian / Boreal, 99)
+  ) %>%
+  arrange(msfd, Year)
+
+# checks
+annual_results_msfd %>% filter(grepl("North", msfd) & Year == 2011)
+
+write.taf(annual_results_msfd, dir = "model", quote = TRUE)

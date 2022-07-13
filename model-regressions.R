@@ -61,3 +61,28 @@ sst_regressions_msfd <-
     arrange(msfd)
 
 write.taf(sst_regressions_msfd, dir = "model", quote = TRUE)
+
+
+
+# read annual data for msfd regions
+annual_results_msfd <-
+  read.taf(
+    "model/annual_results_msfd.csv"
+  )
+
+# run a Kendall test for trends
+trend_regressions_msfd <-
+  annual_results_msfd %>%
+  mutate(
+    ratio = ifelse(ratio == Inf, 30, ratio)
+  ) %>%
+  group_by(
+    msfd
+  ) %>%
+  summarise(
+    pval = Kendall::MannKendall(ratio)$sl
+  ) %>%
+  ungroup() %>%
+  arrange(msfd)
+
+write.taf(sst_regressions_msfd, dir = "model", quote = TRUE)

@@ -69,6 +69,15 @@ lusitanian <-
     )
 
 if (FALSE) {
+  # check on porcupine bank survey
+  lusitanian %>%
+    filter(Survey == "SP-PORC") %>%
+    tibble() %>%
+    count(Year)
+}
+
+
+if (FALSE) {
   lusitanian %>%
     filter(Survey == "SP-PORC" & Year == 2015)
 

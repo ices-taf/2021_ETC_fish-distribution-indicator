@@ -13,14 +13,14 @@ interval, 1965-2016*
 *Temporal development in the number of species of each biogeographical
 affinity group*
 
-<img src="report/Figure2_temporal_species_count.png" width="8031" />
+<img src="report/Figure2_temporal_species_count_msfd.png" width="8031" />
 
 ## Figure 3
 
 *Temporal development of the ratio between the number of Lusitanian and
 Boreal species*
 
-<img src="report/Figure3_temporal_ratio_sst.png" width="8031" />
+<img src="report/Figure3_temporal_ratio_sst_msfd.png" width="8031" />
 
 ## Table 1
 
@@ -54,4 +54,7 @@ Boreal species*
 ## Notes
 
   - revised values for SP-NORTH in 2017, more species added
+
   - revised values for SP-PORC in 2011-2013 and 2015, more species added
+
+  - Hadley SST data not updated for 2019
